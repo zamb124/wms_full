@@ -1,0 +1,14 @@
+.idea/
+**/__pycache__/
+config/host-local.yml
+venv
+odoo_source/
+odoo/
+data_dir
+**/.DS_Store
+woody/yoyo.ini
+woody/tmp.ods
+*.xlsx
+*.out
+
+node_modules
