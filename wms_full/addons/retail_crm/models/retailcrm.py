@@ -127,6 +127,8 @@ class RetailCrm(models.Model):
             if responce:
                 if responce.status_code == 200:
                     rs.parce_sites(responce.json())
+                else:
+                    print(f'Cannot to connect\n URL:{url}\napiKey:{apikey}')
         return True
 
 
