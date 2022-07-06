@@ -1,26 +1,32 @@
 ###################################################################################
 
-from odoo import models, fields, _
+from odoo import models, fields, _, api
 import logging
 _logger = logging.getLogger(__name__)
 
 
 class ProductTemplate(models.Model):
+    _inherit = 'product.template'
+    url_image = fields.Char(string='Image', related='product_variant_id.url_image')
+    owner_id = fields.Many2one('res.partner', string='Owner', store=True, compute='_compute_crm_fields')
+
+    @api.depends('product_variant_ids', 'product_variant_ids.owner_id')
+    def _compute_crm_fields(self):
+        for i in self:
+            i.owner_id = i.product_variant_id.owner_id
+
+class ProductProduct(models.Model):
     """"
     Добовим кор счет
     """
-    _inherit = 'product.template'
+    _inherit = 'product.product'
 
     def _get_default_category_id(self):
         return False
 
     owner_id = fields.Many2one('res.partner', index=True)
-    categ_id = fields.Many2one(
-        'product.category', 'Product_Category',
-        change_default=True, default=_get_default_category_id,
-        required=False, help="Select category for the current product")
     article = fields.Char(
-        'Article'
+        'Article', index=True
     )
     url = fields.Char(
         'url'
@@ -35,5 +41,7 @@ class ProductTemplate(models.Model):
         'quantity'
     )
     retailcrm_id = fields.Integer(
-        'retailCrm ID'
+        'retailCrm ID', index=True
     )
+    _sql_constraints = [('id_uniq', 'UNIQUE (owner_id, external_id)', 'Owner  and ''external_id ''must by unique'), ]
+

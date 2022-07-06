@@ -20,15 +20,21 @@
 
     # any module necessary for this one to work correctly
     'depends': [
+        'base',
         'product',
         'stock',
+        'ec_web_widget_image_url',
         'wms'
     ],
 
     # always loaded
     'data': [
         'security/ir.model.access.csv',
-        'views/views.xml',
+        'views/order.xml',
+        'views/menus.xml',
+        'views/product.xml',
+        'data/cron_schelued_actions.xml',
+
         #'views/stock_picking_form.xml',
     ],
     # only loaded in demonstration mode

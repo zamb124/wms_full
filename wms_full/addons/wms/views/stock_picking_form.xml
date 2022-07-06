@@ -86,7 +86,9 @@
                         <group>
                             <div class="o_td_label">
                                 <label for="partner_id" string="Delivery Address" style="font-weight:bold;"
-                                       attrs="{'invisible': [('picking_type_code', '!=', 'outgoing')]}"/>
+                                       attrs="{
+                                       'invisible': [('picking_type_code', '!=', 'outgoing')]
+                                       }"/>
                                 <label for="partner_id" string="Receive From" style="font-weight:bold;"
                                        attrs="{'invisible': [('picking_type_code', '!=', 'incoming')]}"/>
                                 <label for="partner_id" string="Contact" style="font-weight:bold;"
@@ -164,6 +166,7 @@
                                     <field name="product_uom_category_id" invisible="1"/>
                                     <field name="has_tracking" invisible="1"/>
                                     <field name="display_assign_serial" invisible="1"/>
+                                    <field name="owner_id" invisible="1"/>
                                     <field name="product_id" required="1" context="{'default_detailed_type': 'product'}" attrs="{'readonly': ['|', '&amp;', ('state', '!=', 'draft'), ('additional', '=', False), ('move_lines_count', '&gt;', 0)]}"/>
                                     <field name="description_picking" string="Description" optional="hide"/>
                                     <field name="date" optional="hide"/>
@@ -209,6 +212,7 @@
                                         <field name="additional" invisible="1"/>
                                         <field name="move_lines_count" invisible="1"/>
                                         <field name="company_id" invisible="1"/>
+                                        <field name="owner_id" invisible="1"/>
                                         <field name="product_id" required="1" attrs="{'readonly': ['|', '&amp;', ('state', '!=', 'draft'), ('additional', '=', False), ('move_lines_count', '&gt;', 0)]}"/>
                                         <field name="is_initial_demand_editable" invisible="1"/>
                                         <field name="is_quantity_done_editable" invisible="1"/>

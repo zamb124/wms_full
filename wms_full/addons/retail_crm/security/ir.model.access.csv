@@ -1,2 +1,6 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
 retail_crm_admin,retailcrm.retailcrm,retail_crm.model_retailcrm,stock.group_stock_manager,1,1,1,1
+retail_crm_admin_delivery,retailcrm.delivery,retail_crm.model_retailcrm_delivery,stock.group_stock_manager,1,1,1,1
+retail_crm_admin_delivery_type,retailcrm.delivery_type,retail_crm.model_retailcrm_delivery_type,stock.group_stock_manager,1,1,1,1
+retail_crm_admin_order,retailcrm.delivery_type,retail_crm.model_retailcrm_order,stock.group_stock_manager,1,1,1,1
+retail_crm_admin_order_line,retailcrm.delivery_type,retail_crm.model_retailcrm_order_line,stock.group_stock_manager,1,1,1,1

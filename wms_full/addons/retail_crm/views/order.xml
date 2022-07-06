@@ -1,0 +1,101 @@
+<odoo>
+    <data>
+        <record id="retail_order_view_tree" model="ir.ui.view">
+            <field name="name">retail.order.tree</field>
+            <field name="model">retailcrm.order</field>
+            <field name="arch" type="xml">
+                <tree string="Retail Orders" sample="1">
+                    <field name="owner_id"/>
+                    <field name="state"/>
+                    <field name="status_updated" widget="date"/>
+                    <field name="external_id"/>
+                    <field name="retailcrm_id"/>
+                    <field name="sum"/>
+                    <field name="total_sum"/>
+                    <field name="delivery"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="retail_order_view" model="ir.ui.view">
+            <field name="name">retail.order.form</field>
+            <field name="model">retailcrm.order</field>
+            <field name="arch" type="xml">
+                <form string="Retail Order">
+                    <header>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                    <sheet>
+                        <field name="paid" invisible="1"/>
+                        <widget name="web_ribbon" title="Paid" bg_color="bg-success" attrs="{'invisible': [('paid', '=', False)]}"/>
+                        <div class="oe_title">
+                            <h1><field name="owner_id" placeholder="e.g. USD Retailers"/></h1>
+                        </div>
+                        <group>
+                          <group name="settings">
+                              <field name="owner_id"/>
+                              <field name="retailcrm_id"/>
+                              <field name="company_id" />
+                          </group>
+                        </group>
+                        <notebook>
+                            <page name="pricelist_rules" string="Price Rules">
+                              <field name="order_line_ids" nolabel="1" context="{'default_base':'list_price'}">
+                                  <tree string="Pricelist Rules" editable="bottom">
+                                      <field name="company_id" invisible="1"/>
+                                      <field name="owner_id" invisible="1"/>
+                                      <field name="product_id" string="Products" required="1"/>
+                                      <field name="order_qty" string="Ordered qty"/>
+                                      <field name="price"/>
+                                      <field name="qty_shipped" invisible="1"/>
+                                      <field name="subtotal"/>
+                                  </tree>
+                              </field>
+                                <group name="note_group" col="6" class="mt-2 mt-md-0">
+
+                                <group class="oe_subtotal_footer oe_right" colspan="2" name="total">
+                                    <field name="sum"  readonly="1" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="total_sum"  readonly="1" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="prepaysum"  readonly="1" options="{'currency_field': 'currency_id'}"/>
+                                    <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                                        <label for="remaind_sum"/>
+                                    </div>
+                                    <field name="remaind_sum" readonly="1" nolabel="1" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+
+                            </group>
+                            </page>
+                            <page name="pricelist_config" string="Configuration">
+                                <group>
+                                    <group name="pricelist_availability" string="Availability">
+                                        <field name="delivery" />
+                                    </group>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="retail_order_action" model="ir.actions.act_window">
+            <field name="name">Retail Order</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">retailcrm.order</field>
+            <field name="view_mode">tree,kanban,form</field>
+            <!--<field name="search_view_id" ref="product_pricelist_view_search" />-->
+            <field name="context">{"default_base": 'list_price'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new order
+                </p><p>
+                A price is a set of sales prices or rules to compute the price of sales order lines based on products,
+                product categories, dates and ordered quantities.
+                This is the perfect tool to handle several pricings, seasonal discounts, etc.
+            </p><p>
+                You can assign pricelists to your customers or select one when creating a new sales quotation.
+            </p>
+            </field>
+        </record>
+    </data>
+</odoo>
