@@ -1,1 +1,0 @@
-from . import stock_picking,product_template, stock_move

@@ -22,9 +22,9 @@
     'depends': [
         'base',
         'product',
+        'muk_web_theme',
         'stock',
         'ec_web_widget_image_url',
-        'wms'
     ],
 
     # always loaded
@@ -34,6 +34,9 @@
         'views/menus.xml',
         'views/product.xml',
         'data/cron_schelued_actions.xml',
+        'views/res_partner_form.xml',
+        'views/stock_picking_form.xml',
+        'views/views.xml'
 
         #'views/stock_picking_form.xml',
     ],

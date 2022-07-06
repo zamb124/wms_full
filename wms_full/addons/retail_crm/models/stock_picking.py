@@ -7,28 +7,15 @@ class StockPicking(models.Model):
     _inherit = 'stock.picking'
     owner_id = fields.Many2one(
         'res.partner', 'Assign Owner',
-        states={'done': [('readonly', True)], 'cancel': [('readonly', True)]},
         check_company=True,
         required=False,
+        store=True,
         help="When validating the transfer, the products will be assigned to this owner.")
 
-    @api.onchange('partner_id')
+    @api.onchange('partner_id', 'owner_id')
     def set_owner_id(self):
         for i in self:
             i.owner_id = i.partner_id
-
-
-    # def create(self, vals):
-    #     a=1
-    #     create = super().create(vals)
-    #     a=1
-    #     return create
-    #
-    # def button_validate(self):
-    #     a=1
-    #     bv = super().button_validate()
-    #     a=1
-    #     return  bv
 
     @api.onchange('show_operations')
     def _onchange_show_operations(self):

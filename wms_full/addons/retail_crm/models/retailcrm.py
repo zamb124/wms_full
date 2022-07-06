@@ -377,7 +377,7 @@ class RetailCrm(models.Model):
         }
         price_item = product_obj.search([('retailcrm_id', '=', offer['id'])])
         if not price_item:
-            price_item = product_obj.create(price_item__vals)
+            price_item = price_item_obj.create(price_item__vals)
         return price_item[0]
 
     def create_objects_by_orders(self, shop, orders):
@@ -425,6 +425,7 @@ class RetailCrm(models.Model):
                     'code': delivery_code,
                     'name': delivery_code
                 })
+                deliveryes.update({delivery_id.code: delivery_id})
             items = items_cleaned.get(order['id'], [])
             order_lines = self.env['retailcrm.order.line']
             for i in items:
