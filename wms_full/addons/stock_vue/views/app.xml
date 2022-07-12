@@ -12,8 +12,8 @@
     <title>lvue</title>
         <link rel="stylesheet" href="/stock_vue/static/style.css"></link>
     <script defer="defer" src="/stock_vue/static/js/chunk-vendors.ad7b5a1a.js"></script>
-    <script defer="defer" src="/stock_vue/static/js/app.a0001e89.js"></script>
-        <link href="/stock_vue/static/css/app.99bd3d79.css" rel="stylesheet"></link>
+    <script defer="defer" src="/stock_vue/static/js/app.a2af2528.js"></script>
+        <link href="/stock_vue/static/css/app.16b83871.css" rel="stylesheet"></link>
 </head>
 <body>
 <noscript><strong>We're sorry but lvue doesn't work properly without JavaScript enabled. Please enable it to
