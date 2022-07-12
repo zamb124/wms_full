@@ -25,18 +25,25 @@
         'muk_web_theme',
         'stock',
         'ec_web_widget_image_url',
+        'stock_vue'
     ],
 
     # always loaded
     'data': [
+        'security/purchase_security.xml',
         'security/ir.model.access.csv',
         'views/order.xml',
         'views/menus.xml',
+        'views/portal_templates.xml',
+        'views/purchase_views.xml',
         'views/product.xml',
         'data/cron_schelued_actions.xml',
         'views/res_partner_form.xml',
         'views/stock_picking_form.xml',
-        'views/views.xml'
+        'views/views.xml',
+        'data/data.xml',
+        'views/stock_warehouse_views.xml',
+        'views/stock_location_views.xml'
 
         #'views/stock_picking_form.xml',
     ],

@@ -9,11 +9,7 @@ class ProductCategory(models.Model):
     Добовим кор счет
     """
     _inherit = 'product.category'
-    retailcrm_id = fields.Integer(
-        'retailCrm ID',
-        index=True
-    )
-    externalId = fields.Char(
+    external_id = fields.Char(
         'shop external ID'
     )
     owner_id = fields.Many2one('res.partner', index=True)

@@ -219,7 +219,7 @@
                 <group expand="1" string="Group By">
                     <filter string="Product Type" name="type" context="{'group_by':'type'}"/>
                     <filter string="Product Category" name="categ_id" context="{'group_by':'categ_id'}"/>
-                    <filter string="Owner " name="owner_id" context="{'group_by':'owner_id'}"/>
+                     <filter string="Owner " name="owner_id" context="{'group_by':'owner_id'}"/>
                 </group>
             </search>
         </field>

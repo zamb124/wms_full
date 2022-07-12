@@ -4,3 +4,9 @@ retail_crm_admin_delivery,retailcrm.delivery,retail_crm.model_retailcrm_delivery
 retail_crm_admin_delivery_type,retailcrm.delivery_type,retail_crm.model_retailcrm_delivery_type,stock.group_stock_manager,1,1,1,1
 retail_crm_admin_order,retailcrm.delivery_type,retail_crm.model_retailcrm_order,stock.group_stock_manager,1,1,1,1
 retail_crm_admin_order_line,retailcrm.delivery_type,retail_crm.model_retailcrm_order_line,stock.group_stock_manager,1,1,1,1
+access_purchase_order,purchase.order,retail_crm.model_purchase_order,group_purchase_user,1,1,1,1
+access_purchase_order_manager,purchase.order,retail_crm.model_purchase_order,group_purchase_manager,1,1,1,1
+access_purchase_order_line,purchase.order.line user,retail_crm.model_purchase_order_line,group_purchase_user,1,1,1,1
+access_purchase_order_line_manager,purchase.order.line,retail_crm.model_purchase_order_line,group_purchase_manager,1,1,1,1
+access_purchase_order_portal,purchase.order.portal,retail_crm.model_purchase_order,base.group_portal,1,0,0,0
+access_purchase_order_line_portal,purchase.order.line.portal,retail_crm.model_purchase_order_line,base.group_portal,1,0,0,0

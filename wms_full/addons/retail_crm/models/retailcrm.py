@@ -24,7 +24,8 @@ class RetailCrm(models.Model):
         partner_obj = self.env['res.partner']
         return partner_obj.search([
             ('type', '=', 'delivery'),
-            ('retailcrm', '=', self.id)
+            ('retailcrm', '=', self.id),
+            ('ymlurl', '!=', False)
         ])
 
     def get_or_create_crm_bank(self, contragent, contragent_data):
@@ -88,6 +89,18 @@ class RetailCrm(models.Model):
             'company_type': 'company',
             'bank_ids': [(4, self.get_or_create_crm_bank(contragent, contragent_data))],
         })
+        # create portal_user
+        login = f'{contragent.vat}@wms.ru'
+        res_user_obj = self.env['res.users']
+        exist = res_user_obj.search([('login', '=', login)])
+        if not exist:
+            res_user_obj.create({
+                'name': contragent.name,
+                'login': login,
+                'partner_id': contragent.id,
+                'password': 'Zz123456', #TODO:
+                'groups_id': [(6, 0, self.env.ref('base.group_portal').ids)]
+            })
         return contragent.id
 
     def parce_sites(self, responce_data):
@@ -105,7 +118,7 @@ class RetailCrm(models.Model):
                 'retailcrm': self.id,
                 'retailcrm_catalog_id': site['catalogId'],
                 'name': site['name'],
-                'ymlurl': site['ymlUrl'] if site.get('ymlUrl') else '',
+                'ymlurl': site['ymlUrl'] if site.get('ymlUrl') else False,
                 'code': site['code'],
                 'email': site.get('senderEmail') if site.get('senderEmail') else site.get('senderName'),
                 'type': 'delivery',
@@ -220,7 +233,7 @@ class RetailCrm(models.Model):
 
     def create_offers_items(self, price_list, products, products_done):
         offers = {i['id']: i['offers'] for i in products}
-        products_map = {i['retailcrm_id']: i.id for i in products_done}
+        products_map = {i['retailcrm_id']: i for i in products_done}
         price_obj = self.env['product.pricelist.item']
         prices_exists = {i.retailcrm_id: i for i in price_obj.search([
             ('pricelist_id', '=', price_list.id)
@@ -230,15 +243,16 @@ class RetailCrm(models.Model):
             busket = []
             for offer in offers:
                 price_exist = prices_exists.get(offer['id'])
+                product = products_map[i]
                 vals = {
                     'applied_on': '0_product_variant',
                     'retailcrm_id': offer['id'],
                     'external_id': offer.get('externalId', False),
                     'pricelist_id': price_list.id,
                     'fixed_price': offer.get('price', 0.0),
-                    'product_id': products_map[i],
+                    'product_id': product.id,
                     'min_quantity': offer.get('quantity', 0.0),
-                    'article': offer.get('article', False),
+                    'default_code': offer.get('article', False),
                     'barcode': offer.get('barcode', False)
                 }
                 if price_exist:
@@ -279,7 +293,7 @@ class RetailCrm(models.Model):
                 'name': product['name'],
                 'owner_id': shop.id,
                 'categ_id': cat_id if cat_id else 1,
-                'article': product.get('article', False),
+                'default_code': product.get('article', False),
                 'url': product.get('url', False),
                 'url_image': product.get('imageUrl', False),
                 'description': product.get('description', False),
@@ -355,7 +369,7 @@ class RetailCrm(models.Model):
             'name': product['name'],
             'owner_id': shop.id,
             'categ_id': 1,
-            'article': product.get('article', False),
+            'default_code': product.get('article', False),
             'external_id': offer.get('externalId', False),
             'quantity': offer.get('quantity', False),
             'retailcrm_id': product['id'],
@@ -371,7 +385,7 @@ class RetailCrm(models.Model):
             'pricelist_id': pricelist.id,
             'fixed_price': offer.get('price', 0.0),
             'min_quantity': offer.get('quantity', 0.0),
-            'article': offer.get('article', False),
+            'default_code': offer.get('article', False),
             'barcode': offer.get('barcode', False),
             'product_id': product[0].id
         }

@@ -36,5 +36,17 @@
             <field name="active">False</field>
             <field eval="False" name="doall"/>
         </record>
+        <record id="ir_cron_retail_crm_sync_orders" model="ir.cron">
+            <field name="name">Sync Orders</field>
+            <field name="model_id" ref="retail_crm.model_retailcrm"/>
+            <field name="state">code</field>
+            <field name="code">model.sync_retail_srm_orders()</field>
+            <field name="user_id" ref="base.user_root"/>
+            <field name="interval_number">50</field>
+            <field name="interval_type">minutes</field>
+            <field name="numbercall">-1</field>
+            <field name="active">False</field>
+            <field eval="False" name="doall"/>
+        </record>
     </data>
 </odoo>

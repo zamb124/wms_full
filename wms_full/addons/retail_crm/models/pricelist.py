@@ -11,13 +11,10 @@ class Pricelist(models.Model):
 class PricelistItem(models.Model):
     _inherit = "product.pricelist.item"
 
-    retailcrm_id = fields.Integer(
-        'retailCrm ID', index=True
-    )
     external_id = fields.Char(
         'external ID', index=True
     )
-    article = fields.Char(
+    default_code = fields.Char(
         'Article', index=True
     )
     barcode = fields.Char(

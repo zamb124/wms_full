@@ -3,12 +3,13 @@
 from odoo import models, fields, api
 from ast import literal_eval
 
+
 class StockPicking(models.Model):
     _inherit = 'stock.picking'
     owner_id = fields.Many2one(
         'res.partner', 'Assign Owner',
         check_company=True,
-        required=False,
+        required=True,
         store=True,
         help="When validating the transfer, the products will be assigned to this owner.")
 
@@ -21,6 +22,11 @@ class StockPicking(models.Model):
     def _onchange_show_operations(self):
         if self.show_operations and self.code != 'incoming':
             self.show_reserved = True
+
+    @api.model
+    def create(self, vals):
+        res = super(StockPicking, self).create(vals)
+        return res
 
 class PickingType(models.Model):
     _inherit = "stock.picking.type"

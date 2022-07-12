@@ -1,0 +1,69 @@
+<odoo>
+    <data>
+      <!-- Top menu item -->
+
+
+        <record id="stock_storekeeper_view_tree" model="ir.ui.view">
+            <field name="name">stock.storekeeper.tree</field>
+            <field name="model">stock.storekeeper</field>
+            <field name="arch" type="xml">
+                <tree string="Storekeepers" sample="1">
+                    <!--<field name="owner_id"/>-->
+                    <field name="user_id"/>
+                    <field name="warehouse_id"/>
+                    <field name="user_barcode"/>
+                    <field name="user_role"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="stock_storekeeper_view" model="ir.ui.view">
+            <field name="name">stock.storekeeper.form</field>
+            <field name="model">stock.storekeeper</field>
+            <field name="arch" type="xml">
+                <form string="Storekeeper">
+                    <button name="open_ui" string="Open UI" class="oe_highlight" type="object"/>
+                    <field name="user_id"/>
+                    <field name="user_id"/>
+                    <field name="warehouse_id"/>
+                    <field name="user_barcode"/>
+                    <field name="user_role"/>
+                </form>
+            </field>
+        </record>
+
+        <record id="stock_storekeeper_action" model="ir.actions.act_window">
+            <field name="name">Storekeepers</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">stock.storekeeper</field>
+            <field name="view_mode">tree,form</field>
+            <!--<field name="search_view_id" ref="product_pricelist_view_search" />-->
+            <field name="context">{"default_base": 'list_price'}</field>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Create a new keeper
+                </p><p>
+                A price is a set of sales prices or rules to compute the price of sales order lines based on products,
+                product categories, dates and ordered quantities.
+                This is the perfect tool to handle several pricings, seasonal discounts, etc.
+            </p><p>
+                You can assign pricelists to your customers or select one when creating a new sales quotation.
+            </p>
+            </field>
+        </record>
+      <menuitem name="Storekeepers"
+            id="storekeepers_menu_app_root"
+            groups="stock.group_stock_manager,stock.group_stock_user"
+            web_icon="stock_vue,static/phone.png"
+            sequence="135"/>
+
+        <menuitem id="menu_storekeepers_manage" name="Storekeepers"
+            parent="storekeepers_menu_app_root" sequence="1" />
+
+        <!--Supplier menu-->
+
+        <menuitem
+           action="stock_storekeeper_action" id="stock.storekepers_action"
+           parent="menu_storekeepers_manage" sequence="1"/>
+    </data>
+</odoo>
