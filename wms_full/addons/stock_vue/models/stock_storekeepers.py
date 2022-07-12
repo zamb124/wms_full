@@ -148,7 +148,7 @@ class Warehouse(models.Model):
                 'sequence': 0,
                 'stock_pikcking_type_id': res.return_type_id.id,
                 'name': 'product_id',
-                'input': 'quantity_done',
+                'input': 'qty_done',
                 'input_type': 'integer'
             },
             {
