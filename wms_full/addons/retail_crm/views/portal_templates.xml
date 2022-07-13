@@ -107,11 +107,7 @@
                                   t-options="{'time_only': True}"/>
                         </td>
                         <td class="text-center">
-                            <span t-if="order.invoice_status == 'to invoice'" class="badge badge-pill badge-info">
-                                <i class="fa fa-fw fa-file-text" role="img" aria-label="Waiting for Bill"
-                                   title="Waiting for Bill"></i><span class="d-none d-md-inline"> Waiting for
-                                Bill</span>
-                            </span>
+
                             <span t-if="order.state == 'cancel'" class="badge badge-pill badge-secondary">
                                 <i class="fa fa-fw fa-remove" role="img" aria-label="Cancelled"
                                    title="Cancelled"></i><span class="d-none d-md-inline"> Cancelled</span>
@@ -134,7 +130,7 @@
             <t t-set="o_portal_fullwidth_alert" groups="retail_crm.group_purchase_manager">
                 <t t-call="portal.portal_back_in_edit_mode">
                     <t t-set="backend_url"
-                       t-value="'/web#model=%s&amp;id=%s&amp;action=%s&amp;view_type=form' % (order._name, order.id, order.env.ref('purchase_crm.purchase_rfq').id)"/>
+                       t-value="'/web#model=%s&amp;id=%s&amp;action=%s&amp;view_type=form' % (order._name, order.id, order.env.ref('retail_crm.purchase_rfq').id)"/>
                 </t>
             </t>
 
@@ -200,7 +196,7 @@
 
                     <!-- main content -->
                     <div t-attf-class="card #{'pb-5' if report_type == 'html' else ''}" id="portal_purchase_content">
-                        <div t-call="purchase_crm.purchase_order_portal_content"/>
+                        <div t-call="retail_crm.purchase_order_portal_content"/>
                     </div>
 
                     <!-- chatter -->
