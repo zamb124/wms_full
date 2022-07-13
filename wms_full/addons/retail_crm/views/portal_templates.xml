@@ -387,12 +387,7 @@
                     </tbody>
                 </table>
 
-                <div id="total" t-if="order.state in ['purchase', 'done']" class="row" name="total"
-                     style="page-break-inside: avoid;">
-                    <div t-attf-class="#{'col-4' if report_type != 'html' else 'col-sm-7 col-md-5'} ml-auto">
-                        <t t-call="retail_crm.purchase_order_portal_content_totals_table"/>
-                    </div>
-                </div>
+
             </section>
 
             <section id="terms" class="mt-5" t-if="order.notes">
