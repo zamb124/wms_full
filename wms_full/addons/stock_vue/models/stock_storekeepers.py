@@ -20,6 +20,9 @@ class StockStorekeeper(models.Model):
         [('executer', 'Executer'), ('manager', 'Store Manager')],
         'User role', required=True, default='executer'
     )
+    last_sid = fields.Char(
+        'last_sid', index=True
+    )
 
     def _init_stock_vue_data(self):
         records = self.search([])

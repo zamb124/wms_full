@@ -3,3 +3,5 @@ storekeeper_user,storekeeper_user,stock_vue.model_stock_storekeeper,stock.group_
 storekeeper_manager,storekeeper_manager,model_stock_storekeeper,stock.group_stock_manager,1,1,1,1
 storekeeper_steps_user,storekeeper_steps_user,model_stock_picking_steps,stock.group_stock_manager,1,1,1,1
 storekeeper__steps_manager,storekeeper_steps_manager,model_stock_picking_steps,stock.group_stock_manager,1,1,1,1
+storekeeper_bus_user,storekeeper_bus_user,model_stock_bus,stock.group_stock_manager,1,1,1,1
+storekeeper_bus_manager,storekeeper_bus_manager,model_stock_bus,stock.group_stock_manager,1,1,1,1

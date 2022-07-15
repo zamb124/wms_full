@@ -19,27 +19,31 @@ class MobileApp(http.Controller):
         storekeeper = req.env['stock.storekeeper']
         token = request.httprequest.headers.environ.get('HTTP_AUTHORIZATION').split('\t')[1]
         data = json.loads(request.httprequest.data)
-        storekeeper = storekeeper.sudo().search([('user_barcode', '=', token)])
-        return storekeeper.user_id, data
+        storekeeper = storekeeper.sudo().search([('last_sid', '=', token)])
+        return storekeeper.user_id, data, storekeeper.last_sid
 
-    def get_user(self, request, token):
+    def set_user(self, request, token, sid):
         user_obj = request.env['stock.storekeeper']
         user = user_obj.sudo().search([('user_barcode', '=', token)])
+        user.sudo().write({'last_sid': sid})
         return user.user_id
 
     @http.route("/app/v1/login", type="json", auth="none", csrf=False, methods=['GET', 'POST', 'OPTIONS'], cors='*')
     def login(self, **kwargs):
+        from uuid import uuid4
+        sid = uuid4().__str__()
         data = json.loads(request.httprequest.data)
-        user = self.get_user(request, data['qr'])
+        user = self.set_user(request, data['qr'], sid)
         return {
-            'token': data['qr'],
+            'token': sid,
             'user_data': user.name,
-            'store_title': user.name
+            'store_title': user.name,
+
         }
 
     @http.route("/app/v1/main", type="json", auth="none", csrf=False, methods=['GET', 'POST', 'OPTIONS'], cors='*')
     def get_piking_types(self, **kwargs):
-        user, data = self.authorization(request)
+        user, data, session_id = self.authorization(request)
         picking_types_objs = request.env['stock.picking.type'].sudo().search([
             ('company_id', '=', user.company_id.id), ('active', '=', True)
         ])
@@ -64,7 +68,7 @@ class MobileApp(http.Controller):
     @http.route("/app/v1/pickings", type="json", auth="none", csrf=False, methods=['GET', 'POST', 'OPTIONS'], cors='*')
     def pickings(self, **kwargs):
         picking_fields = ['name', 'partner_id', 'location_dest_id', 'scheduled_date', 'state']
-        user, data = self.authorization(request)
+        user, data, session_id = self.authorization(request)
         pt = data['picking_type']
         picking_type_obj = request.env['stock.picking.type']
         picking_type = picking_type_obj.sudo().search_read([('id', '=', int(pt))], ['name', 'warehouse_id', 'description'])[0]
@@ -77,7 +81,7 @@ class MobileApp(http.Controller):
 
     @http.route("/app/v1/picking", type="json", auth="none", csrf=False, methods=['GET', 'POST', 'OPTIONS'], cors='*')
     def picking(self, **kwargs):
-        user, data = self.authorization(request)
+        user, data , session_id = self.authorization(request)
         pt = data['picking_id']
         picking_obj = request.env['stock.picking']
         picking = picking_obj.with_user(user).search([('id', '=', int(pt))])
@@ -90,7 +94,7 @@ class MobileApp(http.Controller):
 
     @http.route("/app/v1/picking_force_complete", type="json", auth="none", csrf=False, methods=['GET', 'POST', 'OPTIONS'], cors='*')
     def picking_force_complete(self, **kwargs):
-        user, data = self.authorization(request)
+        user, data, session_id = self.authorization(request)
         picking = request.env['stock.picking'].sudo().search([('id', '=', data['picking_id'])])
         picking.env.context = picking.with_context(
             skip_backorder=True,
@@ -110,7 +114,7 @@ class MobileApp(http.Controller):
     @http.route("/app/v1/scan_product_with_picking", type="json", auth="none", csrf=False,
                 methods=['GET', 'POST', 'OPTIONS'], cors='*')
     def scan_product_with_picking(self, **kwargs):
-        user, data = self.authorization(request)
+        user, data, session_id = self.authorization(request)
         picking_id = data['payload']['picking']
         picking = request.env['stock.picking'].sudo().search([
             ('id', '=', picking_id)
@@ -132,7 +136,7 @@ class MobileApp(http.Controller):
     @http.route("/app/v1/get_stock_move", type="json", auth="none", csrf=False, methods=['GET', 'POST', 'OPTIONS'],
                 cors='*')
     def get_stock_move(self, **kwargs):
-        user, data = self.authorization(request)
+        user, data, session_id = self.authorization(request)
         stock_mode_id = data['stock_move_id']
         stock_move = request.env['stock.move'].sudo().search([('id', '=', stock_mode_id)])
         return {
@@ -165,7 +169,7 @@ class MobileApp(http.Controller):
         Берем упаковку или создаем новую
         """
         created = False
-        user, data = self.authorization(request)
+        user, data, session_id = self.authorization(request)
         scan_value, object_name, can_obj_create = data['scan_value'], data['object_name'], data['can_obj_create']
         move_line_obj = request.env['stock.move.line']
         comodel = move_line_obj._fields[object_name].comodel_name
@@ -190,7 +194,7 @@ class MobileApp(http.Controller):
     @http.route("/app/v1/stock_move_line_done", type="json", auth="none", csrf=False, methods=['GET', 'POST', 'OPTIONS'],
                 cors='*')
     def stock_move_line_done(self, **kwargs):
-        user, data = self.authorization(request)
+        user, data, session_id = self.authorization(request)
         sml_obj = request.env['stock.move.line']
         sm = request.env['stock.move'].sudo().search([('id', '=', data['stock_move_id'])])
         line_vals = {
@@ -211,4 +215,16 @@ class MobileApp(http.Controller):
         )
         return {
             'status': True
+        }
+
+    @http.route("/app/v1/stock_poll", type="json", auth="none", csrf=False,
+                methods=['GET', 'POST', 'OPTIONS'],
+                cors='*')
+    def stock_poll(self, **kwargs):
+        user, data, session_uid = self.authorization(request)
+        sml_obj = request.env['stock.move.line']
+        orders = request.env['stock.bus'].with_user(user).get_orders_by_user(session_uid)
+        result = {}
+        return {
+            'orders': orders.with_user(user).read_for_controller()
         }
