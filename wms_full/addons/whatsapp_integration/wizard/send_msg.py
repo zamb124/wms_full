@@ -464,6 +464,7 @@ class SendWAMessage(models.TransientModel):
             a=1
             import platform
             if platform.processor() == 'arm':
+                print('IS_ARM')
                 service = Service(executable_path= dir_path + '/chromedriver_m1', log_path=log_path)
             else:
                 print('IS_LINUX')
