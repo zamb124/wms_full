@@ -20,7 +20,8 @@
     'version': '0.1',
 
     # any module necessary for this one to work correctly
-    'depends': ['base', 'stock', 'product'],
+    'depends': ['base', 'stock'],
+    'post_init_hook': '_create_warehouse_data',
 
     # always loaded
     'data': [
@@ -31,6 +32,5 @@
     ],
     # only loaded in demonstration mode
     'demo': [
-        'demo/demo.xml',
     ],
 }

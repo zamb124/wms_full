@@ -55,112 +55,115 @@ class StockStorekeeper(models.Model):
 class Warehouse(models.Model):
     _inherit = 'stock.warehouse'
 
+
+    def _create_steps_data(self):
+        pick_steps = self.env['stock.picking.steps']
+        for res in self:
+            res.in_type_id.pick_steps = pick_steps.create([
+                {
+                    'sequence': 0,
+                    'stock_pikcking_type_id': res.in_type_id.id,
+                    'name': 'product_id',
+                    'input': 'qty_done',
+                    'input_type': 'integer'
+                },
+                {
+                    'sequence': 2,
+                    'stock_pikcking_type_id': res.id,
+                    'name': 'location_dest_id',
+                }
+            ])
+            res.int_type_id.pick_steps = pick_steps.create([
+                {
+                    'sequence': 0,
+                    'stock_pikcking_type_id': res.int_type_id.id,
+                    'name': 'location_id',
+                },
+                {
+                    'sequence': 1,
+                    'stock_pikcking_type_id': res.id,
+                    'name': 'product_id',
+                    'input': 'qty_done',
+                    'input_type': 'integer',
+                    'can_obj_change': True,
+                },
+                {
+                    'sequence': 2,
+                    'stock_pikcking_type_id': res.id,
+                    'name': 'location_dest_id',
+                }
+            ])
+            res.out_type_id.pick_steps = pick_steps.create([
+                {
+                    'sequence': 0,
+                    'stock_pikcking_type_id': res.out_type_id.id,
+                    'name': 'location_id',
+                },
+                {
+                    'sequence': 1,
+                    'stock_pikcking_type_id': res.id,
+                    'name': 'product_id',
+                    'input': 'qty_done',
+                    'input_type': 'integer'
+                },
+            ])
+            res.pack_type_id.pick_steps = pick_steps.create([
+                {
+                    'sequence': 0,
+                    'stock_pikcking_type_id': res.pack_type_id.id,
+                    'name': 'location_id',
+                },
+                {
+                    'sequence': 1,
+                    'stock_pikcking_type_id': res.id,
+                    'name': 'product_id',
+                    'input': 'qty_done',
+                    'input_type': 'integer'
+                },
+                {
+                    'sequence': 2,
+                    'stock_pikcking_type_id': res.id,
+                    'name': 'result_package_id',
+                    'can_obj_create': True
+                }, ])
+
+            res.pick_type_id.pick_steps = pick_steps.create([
+                {
+                    'sequence': 0,
+                    'stock_pikcking_type_id': res.pick_type_id.id,
+                    'name': 'location_id',
+                },
+                {
+                    'sequence': 1,
+                    'stock_pikcking_type_id': res.id,
+                    'name': 'product_id',
+                    'input': 'qty_done',
+                    'input_type': 'integer'
+                },
+                {
+                    'sequence': 2,
+                    'stock_pikcking_type_id': res.id,
+                    'name': 'result_package_id',
+                    'can_obj_create': True
+                }])
+            res.return_type_id.pick_steps = pick_steps.create([
+                {
+                    'sequence': 0,
+                    'stock_pikcking_type_id': res.return_type_id.id,
+                    'name': 'product_id',
+                    'input': 'qty_done',
+                    'input_type': 'integer'
+                },
+                {
+                    'sequence': 1,
+                    'stock_pikcking_type_id': res.id,
+                    'name': 'location_dest_id',
+                    'can_obj_change': True,
+                }
+            ])
+
     @api.model
     def create(self, vals):
         res = super().create(vals)
-        pick_steps = self.env['stock.picking.steps']
-        res.in_type_id.pick_steps = pick_steps.create([
-            {
-                'sequence': 0,
-                'stock_pikcking_type_id': res.in_type_id.id,
-                'name': 'product_id',
-                'input': 'qty_done',
-                'input_type': 'integer'
-            },
-            {
-                'sequence': 2,
-                'stock_pikcking_type_id': res.id,
-                'name': 'location_dest_id',
-            }
-        ])
-        res.int_type_id.pick_steps = pick_steps.create([
-            {
-                'sequence': 0,
-                'stock_pikcking_type_id': res.int_type_id.id,
-                'name': 'location_id',
-            },
-            {
-                'sequence': 1,
-                'stock_pikcking_type_id': res.id,
-                'name': 'product_id',
-                'input': 'qty_done',
-                'input_type': 'integer',
-                'can_obj_change': True,
-            },
-            {
-                'sequence': 2,
-                'stock_pikcking_type_id': res.id,
-                'name': 'location_dest_id',
-            }
-        ])
-        res.out_type_id.pick_steps = pick_steps.create([
-            {
-                'sequence': 0,
-                'stock_pikcking_type_id': res.out_type_id.id,
-                'name': 'location_id',
-            },
-            {
-                'sequence': 1,
-                'stock_pikcking_type_id': res.id,
-                'name': 'product_id',
-                'input': 'qty_done',
-                'input_type': 'integer'
-            },
-        ])
-        res.pack_type_id.pick_steps = pick_steps.create([
-            {
-                'sequence': 0,
-                'stock_pikcking_type_id': res.pack_type_id.id,
-                'name': 'location_id',
-            },
-            {
-                'sequence': 1,
-                'stock_pikcking_type_id': res.id,
-                'name': 'product_id',
-                'input': 'qty_done',
-                'input_type': 'integer'
-            },
-            {
-                'sequence': 2,
-                'stock_pikcking_type_id': res.id,
-                'name': 'result_package_id',
-                'can_obj_create': True
-            }, ])
-
-        res.pick_type_id.pick_steps = pick_steps.create([
-            {
-                'sequence': 0,
-                'stock_pikcking_type_id': res.pick_type_id.id,
-                'name': 'location_id',
-            },
-            {
-                'sequence': 1,
-                'stock_pikcking_type_id': res.id,
-                'name': 'product_id',
-                'input': 'qty_done',
-                'input_type': 'integer'
-            },
-            {
-                'sequence': 2,
-                'stock_pikcking_type_id': res.id,
-                'name': 'result_package_id',
-                'can_obj_create': True
-            }])
-        res.return_type_id.pick_steps = pick_steps.create([
-            {
-                'sequence': 0,
-                'stock_pikcking_type_id': res.return_type_id.id,
-                'name': 'product_id',
-                'input': 'qty_done',
-                'input_type': 'integer'
-            },
-            {
-                'sequence': 1,
-                'stock_pikcking_type_id': res.id,
-                'name': 'location_dest_id',
-                'can_obj_change': True,
-            }
-        ])
-
-
+        res._create_steps_data()
         return res

@@ -1,12 +1,9 @@
 # Copyright (c) 2015-2016 ACSONE SA/NV (<http://acsone.eu>)
 # Copyright 2013-2016 Camptocamp SA
 # License LGPL-3.0 or later (http://www.gnu.org/licenses/lgpl.html)
-import json
 import logging
-from odoo import _, http, fields, exceptions, models
+from odoo import fields, models
 import datetime
-from odoo.http import request
-from odoo.addons.bus.controllers.main import BusController
 
 _logger = logging.getLogger(__name__)
 

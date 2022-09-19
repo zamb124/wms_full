@@ -170,7 +170,6 @@
                     <notebook>
                         <page string="Products" name="products">
                             <field name="order_line"
-
                                 mode="tree,kanban"
                                 context="{'default_state': 'draft'}"
                                 attrs="{'readonly': [('state', 'in', ('done', 'cancel'))]}">

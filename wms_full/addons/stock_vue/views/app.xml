@@ -11,9 +11,9 @@
         <link rel="icon" href="/stock_vue/static/favicon.ico"></link>
     <title>lvue</title>
         <link rel="stylesheet" href="/stock_vue/static/style.css"></link>
-    <script defer="defer" src="/stock_vue/static/js/chunk-vendors.de5d4963.js"></script>
-    <script defer="defer" src="/stock_vue/static/js/app.c374d740.js"></script>
-        <link href="/stock_vue/static/css/app.16b83871.css" rel="stylesheet"></link>
+    <script defer="defer" src="/stock_vue/static/js/chunk-vendors.6e4b69a9.js"></script>
+    <script defer="defer" src="/stock_vue/static/js/app.7e59ce02.js"></script>
+        <link href="/stock_vue/static/css/app.7bd743b8.css" rel="stylesheet"></link>
 </head>
 <body>
 <noscript><strong>We're sorry but lvue doesn't work properly without JavaScript enabled. Please enable it to

@@ -68,10 +68,8 @@ class Picking(models.Model):
     _inherit = 'stock.picking'
 
     def picking_serialaser(self, picking):
-        from collections import defaultdict
         pick_fields = ['id', 'name', 'picking_type_id', 'partner_id', 'location_id', 'location_dest_id', 'partner_id',
                        'move_lines', 'state']
-        repack_fields = ['move_lines']
         pick = {}
         for field in pick_fields:
             val = getattr(picking, field)
@@ -85,11 +83,14 @@ class Picking(models.Model):
                             'picking_id': move.picking_id.id,
                             'barcode': move.product_id.barcode,
                             'qty_done': move.qty_done,  # how to need
-                            'product_qty': move.reserved_availability,
+                            'product_qty': move.product_qty,
                             'partner_id': {'id': move.partner_id.id, 'name': move.partner_id.name},
+                            'state': move.state,
+                            'busy': move.busy,
                             'steps': move.picking_type_id.pick_steps.sorted(lambda x: x.sequence).read(),
                             'product_id': {
                                 'url_image': move.product_id.url_image,
+                                'image_128': f'/web/image?model=product.template&id={move.product_id.product_tmpl_id.id}&field=image_128' if move.product_id.image_128 else False,
                                 'id': move.product_id.id,
                                 'default_code': move.product_id.default_code,
                                 'name': move.product_id.name,
@@ -104,14 +105,14 @@ class Picking(models.Model):
                             'write_uid': {'id': move.write_uid.id, 'name': move.write_uid.name},
                             'write_date': move.write_date
                         }})
-                    sml = {}
-                    for line in move.move_line_ids:
-                        sml.update({
-                            line.id: {
+                    sml = []
+                    for line in move.move_line_ids.sorted(lambda x: x.write_date, reverse=True):
+                        sml.append({
                                 'id': line.id,
                                 'qty_done': line.qty_done,
                                 'product_id': {
                                     'url_image': line.product_id.url_image,
+                                    'image_128': f'/web/image?model=product.template&id={line.product_id.product_tmpl_id.id}&field=image_128' if line.product_id.image_128 else False,
                                     'id': line.product_id.id,
                                     'default_code': line.product_id.default_code,
                                     'name': line.product_id.name,
@@ -125,7 +126,7 @@ class Picking(models.Model):
                                                       'name': line.result_package_id.name} if line.result_package_id else False,
                                 'write_uid': {'id': line.write_uid.id, 'name': line.write_uid.name},
                                 'write_date': line.write_date
-                            }})
+                            })
                     sm[move.id].update({'move_line_ids': sml})
                 pick.update({'move_lines': sm})
             elif isinstance(val, models.Model):
@@ -163,15 +164,15 @@ class StockMove(models.Model):
     product_id = fields.Many2one(
         'product.product', 'Product',
         check_company=True,
-        domain="[('type', 'in', ['product', 'consu']),('owner_id', '=', owner_id), '|', ('company_id', '=', False), ('company_id', '=', company_id)]",
+        domain="[('type', 'in', ['product', 'consu']), '|', ('company_id', '=', False), ('company_id', '=', company_id)]",
         index=True, required=True,
         states={'done': [('readonly', True)]})
 
-    qty_done = fields.Float('Quantity Done', compute='_qty_done_compute', digits='How to need')
+    qty_done = fields.Float('Quantity Done', default=0)
 
-    def _qty_done_compute(self):
-        for move in self:
-            move.qty_done = move.product_uom_qty - move.quantity_done
+    busy = fields.Boolean(
+        string='Processing app status', default=False, help='If True is buzy'
+    )
 
 
 class StockMoveLine(models.Model):

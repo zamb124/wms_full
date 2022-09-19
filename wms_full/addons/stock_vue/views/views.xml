@@ -1,14 +1,14 @@
 <odoo>
     <data>
-      <!-- Top menu item -->
-
-
+        <!-- Top menu item -->
         <record id="stock_storekeeper_view_tree" model="ir.ui.view">
             <field name="name">stock.storekeeper.tree</field>
             <field name="model">stock.storekeeper</field>
             <field name="arch" type="xml">
-                <tree string="Storekeepers" sample="1">
-                    <!--<field name="owner_id"/>-->
+                <tree string="Storekeepers">
+                    <header>
+                        <button name="create"/>
+                    </header>
                     <field name="user_id"/>
                     <field name="warehouse_id"/>
                     <field name="user_barcode"/>
@@ -22,12 +22,17 @@
             <field name="model">stock.storekeeper</field>
             <field name="arch" type="xml">
                 <form string="Storekeeper">
-                    <button name="open_ui" string="Open UI" class="oe_highlight" type="object"/>
-                    <field name="user_id"/>
-                    <field name="user_id"/>
-                    <field name="warehouse_id"/>
-                    <field name="user_barcode"/>
-                    <field name="user_role"/>
+                    <header>
+                        <button name="open_ui" string="Open UI" class="oe_highlight" type="object"/>
+                    </header>
+                    <sheet>
+                        <group>
+                        <field name="user_id"/>
+                        <field name="warehouse_id"/>
+                        <field name="user_barcode"/>
+                        <field name="user_role"/>
+                        </group>
+                    </sheet>
                 </form>
             </field>
         </record>
@@ -51,19 +56,19 @@
             </p>
             </field>
         </record>
-      <menuitem name="Storekeepers"
-            id="storekeepers_menu_app_root"
-            groups="stock.group_stock_manager,stock.group_stock_user"
-            web_icon="stock_vue,static/phone.png"
-            sequence="135"/>
+        <menuitem name="Storekeepers"
+                  id="storekeepers_menu_app_root"
+                  groups="stock.group_stock_manager,stock.group_stock_user"
+                  web_icon="stock_vue,static/phone.png"
+                  sequence="135"/>
 
         <menuitem id="menu_storekeepers_manage" name="Storekeepers"
-            parent="storekeepers_menu_app_root" sequence="1" />
+                  parent="storekeepers_menu_app_root" sequence="1"/>
 
         <!--Supplier menu-->
 
         <menuitem
-           action="stock_storekeeper_action" id="stock.storekepers_action"
-           parent="menu_storekeepers_manage" sequence="1"/>
+                action="stock_storekeeper_action" id="stock.storekepers_action"
+                parent="menu_storekeepers_manage" sequence="1"/>
     </data>
 </odoo>

@@ -206,13 +206,15 @@ class MobileApp(http.Controller):
             'qty_done': data['qty_done'],
             'location_id': sm.location_id.id,
             'location_dest_id': data.get('location_dest_id'),
-            'owner_id': sm.owner_id.id,
+            'partner_id': sm.partner_id.id,
             'company_id': sm.company_id.id,
             'result_package_id': data.get('result_package_id')
         }
-        sml_obj.sudo().create(
+        sml_obj.with_user(user).create(
             line_vals
         )
+        sm.picking_id.write({})
+        sm.qty_done = 0
         return {
             'status': True
         }
@@ -222,9 +224,7 @@ class MobileApp(http.Controller):
                 cors='*')
     def stock_poll(self, **kwargs):
         user, data, session_uid = self.authorization(request)
-        sml_obj = request.env['stock.move.line']
         orders = request.env['stock.bus'].with_user(user).get_orders_by_user(session_uid)
-        result = {}
         return {
             'orders': orders.with_user(user).read_for_controller()
         }
