@@ -451,6 +451,7 @@ class SendWAMessage(models.TransientModel):
         options[unique_user].add_argument('--user-data-dir=' + profile_dir)
         options[unique_user].add_argument('--headless')
         options[unique_user].add_argument('--no-sandbox')
+        options[unique_user].add_argument('--disable-dev-shm-usage')
         options[unique_user].add_argument('--window-size=1366,768')
         options[unique_user].add_argument('--start-maximized')
         # options[unique_user].add_argument('--disable-logging')
