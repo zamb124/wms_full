@@ -463,12 +463,8 @@ class SendWAMessage(models.TransientModel):
             log_path = dir_path + '/chromedriver.log'
             a=1
             import platform
-            if platform.processor() == 'arm':
-                print('IS_ARM')
-                service = Service(executable_path= dir_path + '/chromedriver_m1', log_path=log_path)
-            else:
-                print('IS_LINUX')
-                service = Service(executable_path=dir_path + '/chromedriver_linux', log_path=log_path)
+            print(platform.processor())
+            service = Service(executable_path= dir_path + '/chromedriver_m1', log_path=log_path)
             driver[unique_user] = webdriver.Chrome(service=service, options=options.get(unique_user))
         except Exception as bex:
             _logger.info("browser not starting exception: %s" % bex)
