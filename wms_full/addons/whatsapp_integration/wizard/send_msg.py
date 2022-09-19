@@ -466,6 +466,7 @@ class SendWAMessage(models.TransientModel):
             if platform.processor() == 'arm':
                 service = Service(executable_path= dir_path + '/chromedriver_m1', log_path=log_path)
             else:
+                print('IS_LINUX')
                 service = Service(executable_path=dir_path + '/chromedriver_linux', log_path=log_path)
             driver[unique_user] = webdriver.Chrome(service=service, options=options.get(unique_user))
         except Exception as bex:
